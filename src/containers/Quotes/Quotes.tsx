@@ -50,29 +50,34 @@ const Quotes = () => {
     void fetchQuotes();
   }, [fetchQuotes]);
 
-  const deleteQuote = useCallback(async (id: string) => {
-    try {
-      await axiosApi.delete('/quotes/' + id + '.json');
-      setQuotes((prev) => prev.filter((quote) => quote.id !== id));
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
-  }, []);
+  const deleteQuote = useCallback(
+    async (id: string) => {
+      try {
+        await axiosApi.delete('/quotes/' + id + '.json');
+        void fetchQuotes();
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    },
+    [fetchQuotes],
+  );
 
   return (
     <div className="container">
       <div className="row mt-5">
         <div className="col-md-3 mt-5">
-          <nav className="nav flex-column mt-5">
-            {categories.map((category) => (
-              <NavLink
-                key={category.id}
-                to={category.id ? '/quotes/' + category.id : '/'}
-                className="nav-link"
-              >
-                {category.title}
-              </NavLink>
-            ))}
+          <nav className="navbar justify-content-center mt-5">
+            <ul className="nav flex-column nav-pills gap-2 w-75">
+              {categories.map((category) => (
+                <NavLink
+                  key={category.id}
+                  to={category.id ? '/quotes/' + category.id : '/'}
+                  className="nav-link text-center"
+                >
+                  {category.title}
+                </NavLink>
+              ))}
+            </ul>
           </nav>
         </div>
         <div className="col-md-9">
@@ -89,7 +94,12 @@ const Quotes = () => {
               <Spinner />
             </div>
           ) : quotes.length === 0 && !isLoading ? (
-            <p className="text-center mt-5">Добавьте цитату</p>
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ height: '400px' }}
+            >
+              <p>Добавьте цитату</p>
+            </div>
           ) : (
             <QuotesList quotes={quotes} onDelete={deleteQuote}></QuotesList>
           )}
