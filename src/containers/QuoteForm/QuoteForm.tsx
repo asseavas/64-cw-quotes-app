@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Spinner from '../../components/Spinner/Spinner';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosApi from '../../axiosApi';
 import { enqueueSnackbar } from 'notistack';
+import { Quote } from '../../types';
 
 const initialState = {
   category: '',
@@ -14,9 +15,31 @@ const QuoteForm = () => {
   const [quote, setQuote] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
 
-  const params = useParams();
-  const quoteId = params.postId;
+  const { quoteId } = useParams();
   const navigate = useNavigate();
+
+  const fetchOneQuote = useCallback(async (quoteId: string) => {
+    setIsLoading(true);
+    const response = await axiosApi.get<Quote | null>(
+      '/quotes/' + quoteId + '.json',
+    );
+
+    if (response.data) {
+      setQuote(response.data);
+    } else {
+      return <p className="text-center mt-3">Цитата не найдена</p>;
+    }
+
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (quoteId !== undefined) {
+      void fetchOneQuote(quoteId);
+    } else {
+      setQuote(initialState);
+    }
+  }, [quoteId, fetchOneQuote]);
 
   const onFieldChange = (
     event: React.ChangeEvent<
@@ -37,7 +60,11 @@ const QuoteForm = () => {
     try {
       setIsLoading(true);
 
-      await axiosApi.post('/quotes.json', quote);
+      if (quoteId !== undefined) {
+        await axiosApi.put('/quotes/' + quoteId + '.json', quote);
+      } else {
+        await axiosApi.post('/quotes.json', quote);
+      }
 
       navigate('/');
     } catch (e) {
@@ -96,7 +123,7 @@ const QuoteForm = () => {
             type="submit"
             className="btn btn-primary mt-4 ms-auto px-5 rounded-3"
           >
-            {quoteId ? 'Редактировать' : 'Добавить'}
+            {quoteId ? 'Сохранить' : 'Добавить'}
           </button>
         </div>
       </form>

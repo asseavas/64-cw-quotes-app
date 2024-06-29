@@ -14,6 +14,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Quotes />} />
           <Route path="/add-quote" element={<QuoteForm />} />
+          <Route path="/quotes/:quoteId/edit" element={<QuoteForm />} />
           <Route
             path="*"
             element={<h1 className="text-center">Страница не найдена!</h1>}
