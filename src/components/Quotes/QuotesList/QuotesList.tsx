@@ -1,6 +1,6 @@
 import React from 'react';
-import QuoteCard from '../QuoteCard';
-import { Quote } from '../../../../types';
+import QuoteCard from '../QuoteCard/QuoteCard';
+import { Quote } from '../../../types';
 
 interface Props {
   quotes: Quote[];
@@ -9,8 +9,7 @@ interface Props {
 
 const QuotesList: React.FC<Props> = ({ quotes, onDelete }) => {
   return (
-    <div className="d-flex flex-column align-items-center gap-3 pt-5 mb-5">
-      <h3 className="text-center">Все цитаты</h3>
+    <div className="d-flex flex-column align-items-center gap-3 pt-4 mb-5">
       {quotes
         .slice()
         .reverse()

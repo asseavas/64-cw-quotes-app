@@ -13,6 +13,7 @@ const App = () => {
       <main>
         <Routes>
           <Route path="/" element={<Quotes />} />
+          <Route path="/quotes/:category" element={<Quotes />} />
           <Route path="/add-quote" element={<QuoteForm />} />
           <Route path="/quotes/:quoteId/edit" element={<QuoteForm />} />
           <Route

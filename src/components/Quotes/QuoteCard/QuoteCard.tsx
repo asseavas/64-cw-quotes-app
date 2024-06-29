@@ -13,10 +13,10 @@ const QuoteCard: React.FC<Props> = ({ quote, onDelete }) => {
   };
 
   return (
-    <div className="card rounded-4 border-0 pt-3 pb-2 px-2 w-75">
+    <div className="card rounded-4 border-0 pt-3 pb-2 px-2 w-100">
       <div className="card-body">
         <p className="card-text">"{quote.text}"</p>
-        <p className="card-text mt-3">©{quote.author}</p>
+        <p className="card-text mt-3">© {quote.author}</p>
         <div className="d-flex gap-3">
           <Link
             to={'/quotes/' + quote.id + '/edit'}
